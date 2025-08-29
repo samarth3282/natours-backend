@@ -2,7 +2,7 @@
 
 Exciting tours for adventurous people. Natours is an application for users to book tours.
 
-This repo is just the backend of the whole application. There is a separate repo for the frontend that you can check out [here](https://github.com/codert0109/natours).
+This repo is just the backend of the whole application. There is a separate repo for the frontend that you can check out [here](https://github.com/samarth3282/natours-frontend).
 
 ## 📱 Screenshots
 
@@ -24,7 +24,7 @@ To run Natours on your local machine run the following commands
 
 - Clone your foked repository
    ```sh
-    git clone https://github.com/codert0109/natours-backend.git
+    git clone https://github.com/samarth3282/natours-backend.git
    ```
 - Navigate to root directory and run
    ```sh
@@ -56,10 +56,5 @@ If you find any bugs in the projects not listed in the issues panel. Then feel f
 
 ## 🤖 Feedback
 
-If you have any feedback, please reach out to me at thebluemoonsea@gmail.com
-
-
-## 📝 License
-
-[MIT](https://choosealicense.com/licenses/mit/)
+If you have any feedback, please reach out to me at samarthnimeshkumarpatel@gmail.com
 
