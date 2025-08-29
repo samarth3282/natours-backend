@@ -29,8 +29,56 @@ app.enable('trust proxy');
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Set security HTTP headers
-app.use(helmet());
+// Set security HTTP headers with CORS-friendly configuration
+app.use(
+  helmet({
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+  })
+);
+
+// Configure CORS to allow frontend domain
+const allowedOrigins = [
+  'https://natours-frontend-rhey.onrender.com',
+  'http://localhost:5173', // for local development (Vite)
+  'http://localhost:3000', // for local development
+  'http://127.0.0.1:5173', // for local development (Vite)
+  'http://127.0.0.1:3000', // for local development
+];
+
+// Add environment-specific frontend URL if provided
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(process.env.FRONTEND_URL);
+}
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  preflightContinue: false,
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
+
+// Log CORS requests in development
+if (process.env.NODE_ENV === 'development') {
+  app.use((req, res, next) => {
+    console.log(`CORS Request: ${req.method} ${req.url} from origin: ${req.headers.origin}`);
+    next();
+  });
+}
 
 // Development logging
 if (process.env.NODE_ENV === 'development') {
@@ -83,10 +131,6 @@ app.use(
     ],
   })
 );
-
-// Allow all origins to interact with the API
-app.use(cors());
-app.options('*', cors());
 
 // Compress the text responses
 app.use(compression());
